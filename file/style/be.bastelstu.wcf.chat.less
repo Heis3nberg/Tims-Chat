@@ -8,8 +8,40 @@
  */
 #tplChat {
 	#main > div {
-		overflow: hidden;
-		position: relative;
+		display: -webkit-flex;
+		display: flex;
+		-webkit-flex-direction: row-reverse;
+		flex-direction: row-reverse;
+		height: 500px;
+	}
+	
+	#content {
+		margin-right: 0;
+		flex-grow: 1;
+		
+		-moz-box-sizing: border-box;
+		-webkit-box-sizing: border-box;
+		box-sizing: border-box;
+		
+		display: -webkit-flex;
+		display: flex;
+		
+		-webkit-flex-direction: column;
+		flex-direction: column;
+		
+		> div {
+			-webkit-flex-grow: 0;
+			flex-grow: 0;
+		}
+		
+		.timsChatMessageContainer {
+			-webkit-flex-grow: 1;
+			flex-grow: 1;
+		}
+	}
+	
+	.sidebarCollapsed #content {
+		margin-right: 20px;
 	}
 	
 	#timsChatTopic {
@@ -47,94 +79,99 @@
 					
 					> {
 						.markContainer {
-							display: table-cell;
+							visibility: visible;
 						}
 					}
 				}
 			}
 		}
 		
-		ul {
-			display: table;
-			width: 100%;
+		.timsChatMessage {
+			display: flex;
+			.transition(opacity, .2s);
 			
-			.timsChatMessage {
-				display: table-row;
-				height: 20px;
-				.transition(opacity, .2s);
-				
-				&.unloaded {
-					opacity: .5;
+			&.unloaded {
+				opacity: .5;
+			}
+			
+			&::before {
+				.icon;
+				.icon16;
+				padding: @wcfGapTiny;
+			}
+			
+			&:nth-child(even) {
+				background-color: @wcfContainerAccentBackgroundColor;
+			}
+			
+			> {
+				time, .usernameContainer, .text, .markContainer {
+					padding: @wcfGapTiny 0;
 				}
 				
-				&::before {
-					.icon;
-					.icon16;
-					padding: @wcfGapTiny;
+				.markContainer {
+					visibility: hidden;
 				}
 				
-				&:nth-child(even) {
-					background-color: @wcfContainerAccentBackgroundColor;
+				time {
+					&::before {
+						content: "[";
+					}
+					&::after {
+						content: "]";
+					}
 				}
 				
-				> {
-					time, .usernameContainer, .text, .markContainer {
-						display: table-cell;
-						vertical-align: top;
-						padding: @wcfGapTiny 0;
-					}
-					
-					.markContainer {
-						display: none;
-						padding: 0;
-					}
-					
-					time {
-						&::before {
-							content: "[";
-						}
-						&::after {
-							content: "]";
-						}
-					}
-					
-					.usernameContainer {
-						text-align: right;
-						min-width: 100px;
-						padding-right: @wcfGapSmall;
-						white-space: nowrap;
-						font-weight: bold;
-					}
-					
-					.text {
-						width: 100%;
-					}
+				.usernameContainer {
+					text-align: right;
+					min-width: 100px;
+					padding-right: @wcfGapSmall;
+					white-space: nowrap;
+					font-weight: bold;
+				}
+				
+				.text {
+					flex-grow: 1;
+					flex-shrink: 1;
+					overflow: hidden;
+					width: 500px;
 				}
 			}
 		}
 	}
 	
 	.sidebar {
-		overflow: auto;
-		position: absolute !important;
-		right: 0;
+		z-index: 131 !important;
+		padding-top: 0px !important;
+		float: none;
 		height: 100%;
 		
-		padding-top: 0px !important;
-		
 		> div {
+			height: 100%;
+			
 			> .chatTabMenuContainer {
-				padding: 14px 0 21px;
+				display: -webkit-flex;
+				display: flex;
+				-webkit-flex-direction: column;
+				flex-direction: column;
+				height: 100%;
+				
+				padding: 0;
 				
 				> .chatSidebarMenu {
 					background: @wcfContentBackgroundColor;
-					margin: -14px 0 0;
+					margin: 0;
 					.borderRadius(0);
 				}
 			}
 		}
 		
 		#sidebarContent {
+			overflow-y: scroll;
+			-webkit-flex-grow: 1;
+			flex-grow: 1;
+			height: 200px;
+			
 			fieldset {
 				padding-top: 0px;
 				padding-bottom: 0px;
@@ -168,23 +205,21 @@
 				}
 			}
 			
-			#timsChatUserList {
-				.timsChatUser {
-					> a {
-						background: @wcfContentBackgroundColor;
-						
-						img {
-							margin-right: @wcfGapSmall;
-						}
-					}
+			.timsChatUser {
+				> a {
+					background: @wcfContentBackgroundColor;
 					
-					&.away {
-						opacity: .5;
+					img {
+						margin-right: @wcfGapSmall;
 					}
-					
-					&.suspended a {
-						text-decoration: line-through;
-					}
+				}
+				
+				&.away {
+					opacity: .5;
+				}
+				
+				&.suspended a {
+					text-decoration: line-through;
 				}
 			}
 		}
@@ -214,9 +249,9 @@
 	}
 	
 	@media only screen and (max-width: 800px) {
-		#timsChatMessageContainer {
-			overflow: auto;
-			
+		.timsChatMessageContainer {
+			margin-top: 0;
+			border-top: 0;
 			.timsChatMessage {
 				> time {
 					display: none !important;
@@ -226,6 +261,10 @@
 					min-width: 0px !important;
 				}
 			}
+		}
+		
+		#smilies, #timsChatTopic {
+			display: none;
 		}
 	}
 	
@@ -261,40 +300,6 @@ html.fullscreen {
 	height: 100%;
 	overflow: hidden;
 	
-	#content {
-		height: 100%;
-		
-		-moz-box-sizing: border-box;
-		-webkit-box-sizing: border-box;
-		box-sizing: border-box;
-		
-		display: -moz-box;
-		display: -webkit-box;
-		display: -webkit-flex;
-		display: -ms-flexbox;
-		display: flex;
-		
-		-webkit-box-orient: vertical;
-		-moz-box-orient: vertical;
-		-webkit-box-direction: normal;
-		-moz-box-direction: normal;
-		-webkit-flex-direction: column;
-		-ms-flex-direction: column;
-		flex-direction: column;
-		
-		.timsChatMessageContainer {
-			-webkit-box-flex: 1;
-			-moz-box-flex: 1;
-			-webkit-flex: 1 0 auto;
-			-ms-flex: 1 0 auto;
-			flex: 1 0 auto;
-		}
-	}
-	
-	#timsChatOptions {
-		margin-bottom: @wcfGapMedium;
-	}
-	
 	#tplChat {
 		height: 100%;
 		overflow: hidden;
@@ -314,3 +319,4 @@ html.fullscreen {
 		}
 	}
 }
+
