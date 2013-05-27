@@ -2,10 +2,9 @@
 namespace chat\system\command\commands;
 use \wcf\data\user\User;
 use \wcf\system\WCF;
-use \wcf\util\ChatUtil;
 
 /**
- * Resets the color of a user
+ * Invites a user into a temproom.
  *
  * @author 	Tim Düsterhus
  * @copyright	2010-2013 Tim Düsterhus
@@ -13,10 +12,10 @@ use \wcf\util\ChatUtil;
  * @package	be.bastelstu.chat
  * @subpackage	system.chat.command.commands
  */
-class RestoreCommand extends \chat\system\command\AbstractRestrictedCommand {
-	public $enableHTML = 1;
+class InviteCommand extends \chat\system\command\AbstractRestrictedCommand {
 	public $user = null;
 	public $link = '';
+	public $room = null;
 	
 	public function __construct(\chat\system\command\CommandHandler $commandHandler) {
 		parent::__construct($commandHandler);
@@ -25,16 +24,22 @@ class RestoreCommand extends \chat\system\command\AbstractRestrictedCommand {
 		$this->user = User::getUserByUsername($username);
 		if (!$this->user->userID) throw new \chat\system\command\UserNotFoundException($username);
 		
-		$profile = \wcf\system\request\LinkHandler::getInstance()->getLink('User', array(
-			'object' => $this->user
-		));
-		$this->link = "[url='".$profile."']".$this->user->username.'[/url]';
+		$acl = \wcf\system\acl\ACLHandler::getInstance();
+		$permissions = $acl->getPermissions($acl->getObjectTypeID('be.bastelstu.chat.room'), array($this->room->roomID));
 		
-		$editor = new \wcf\data\user\UserEditor($this->user);
-		$editor->update(array(
-			'chatColor1' => 0,
-			'chatColor2' => 0
-		));
+		$newPermission = array();
+		foreach ($permissions['options'] as $option) {
+			$newPermission[$option->optionID] = ($option->categoryName == 'user') ? 1 : 0;
+		}
+		
+		$_POST['aclValues'] = array(
+			'user' => $permissions['user'][$this->room->roomID],
+			'group' => $permissions['group'][$this->room->roomID]
+		);
+		$_POST['aclValues']['user'][$this->user->userID] = $newPermission;
+		
+		$acl->save($this->room->roomID, $acl->getObjectTypeID('be.bastelstu.chat.room'));
+		\chat\system\permission\PermissionHandler::clearCache();
 		$this->didInit();
 	}
 	
@@ -44,23 +49,21 @@ class RestoreCommand extends \chat\system\command\AbstractRestrictedCommand {
 	public function checkPermission() {
 		parent::checkPermission();
 		
-		WCF::getSession()->checkPermissions(array('mod.chat.canRestore'));
+		$this->room = $this->commandHandler->getRoom();
+		if ($this->room->owner != WCF::getUser()->userID) throw new \wcf\system\exception\PermissionDeniedException();
 	}
 	
 	/**
 	 * @see	\chat\system\command\ICommand::getType()
 	 */
 	public function getType() {
-		return \chat\data\message\Message::TYPE_MODERATE;
+		return \chat\data\message\Message::TYPE_INFORMATION;
 	}
 	
 	/**
 	 * @see	\chat\system\command\ICommand::getMessage()
 	 */
 	public function getMessage() {
-		return serialize(array(
-			'link' => $this->link,
-			'type' => str_replace(array('chat\system\command\commands\\', 'command'), '', strtolower(get_class($this)))
-		));
+		return 'invite derp';
 	}
 }

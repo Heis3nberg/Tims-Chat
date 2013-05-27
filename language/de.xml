@@ -59,6 +59,7 @@
 		<item name="chat.error.userNotFound"><![CDATA[Der Benutzer „{$exception->getUsername()}“ wurde nicht gefunden.]]></item>
 		<item name="chat.error.permissionDenied"><![CDATA[Sie dürfen diesen Befehl nicht verwenden.]]></item>
 		<item name="chat.error.duplicateTab"><![CDATA[Der Chat wurde in einem weiteren Tab geöffnet.]]></item>
+		<item name="chat.error.join"><![CDATA[Der Chatraum konnte nicht betreten werden.]]></item>
 		<item name="chat.error.reload"><![CDATA[Neu laden]]></item>
 	</category>
 	
@@ -103,9 +104,9 @@
 	
 	<category name="chat.message">
 		<!-- 1 = TYPE_JOIN -->
-		<item name="chat.message.1"><![CDATA[hat den Chat betreten.{if $__wcf->session->getPermission('admin.user.canViewIpAddress')} ({$ipAddress}){/if}]]></item>
+		<item name="chat.message.1"><![CDATA[hat den Chat betreten.{if $__wcf->session->getPermission('admin.user.canViewIpAddress') && $ipAddress} ({$ipAddress}){/if}]]></item>
 		<!-- 2 = TYPE_LEAVE -->
-		<item name="chat.message.2"><![CDATA[hat den Chat verlassen.]]></item>
+		<item name="chat.message.2"><![CDATA[{if $room == null}hat den Chat verlassen.{else}ist in den Raum „{$room}“ gegangen.{/if}]]></item>
 		<!-- 3 = TYPE_AWAY -->
 		<item name="chat.message.3"><![CDATA[ist jetzt abwesend{if $message}: {$message}{else}.{/if}]]></item>
 		<!-- 4 = TYPE_BACK -->
@@ -117,6 +118,7 @@
 		<item name="chat.message.5.gmute"><![CDATA[hat {@$link} bis {@$expires|plainTime} global geknebelt.]]></item>
 		<item name="chat.message.5.gban"><![CDATA[hat {@$link} bis {@$expires|plainTime} global gebannt.]]></item>
 		<item name="chat.message.5.unmute"><![CDATA[hat {@$link} entknebelt.]]></item>
+		<item name="chat.message.5.unban"><![CDATA[hat {@$link} entbannt.]]></item>
 		
 		<item name="chat.message.color.success"><![CDATA[Die Farbe wurde erfolgreich geändert.]]></item>
 	</category>
