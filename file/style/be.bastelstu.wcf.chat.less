@@ -7,11 +7,15 @@
  * @package	be.bastelstu.wcf.chat
  */
 #tplChat {
+	#main {
+		display: block;
+	}
+	
 	#main > div {
 		display: -webkit-flex;
 		display: flex;
-		-webkit-flex-direction: row-reverse;
-		flex-direction: row-reverse;
+		-webkit-flex-direction: row;
+		flex-direction: row;
 		height: 500px;
 	}
 	
@@ -40,9 +44,6 @@
 		}
 	}
 	
-	.sidebarCollapsed #content {
-		margin-right: 20px;
-	}
 	
 	#timsChatTopic {
 		padding: @wcfGapTiny;
@@ -142,9 +143,11 @@
 	
 	.sidebar {
 		z-index: 131 !important;
-		padding-top: 0px !important;
+		padding: 0px !important;
 		float: none;
 		height: 100%;
+		position: relative;		
+		display: block !important;
 		
 		> div {
 			height: 100%;
