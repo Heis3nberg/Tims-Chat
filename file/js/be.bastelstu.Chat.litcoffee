@@ -74,6 +74,8 @@ Initialize **Tims Chat**. Bind needed DOM events and initialize data structures.
 			
 			console.log 'Initializing'
 
+			WCF.DOMNodeInsertedHandler.addCallback('be.bastelstu.Chat', domNodeInserted)
+
 When **Tims Chat** becomes focused mark the chat as active and remove the number of new messages from the title.
 
 			$(window).focus ->
@@ -333,6 +335,15 @@ Finished! Enable the input now and join the chat.
 			
 			true
 
+		domNodeInserted = ->
+			$('.timsChatMessage img').on('load', (event) ->
+				image = $(event.currentTarget)
+				if !image.parent('a').length
+					image.wrap '<a href="' + image.attr('src') + '" />';
+				
+				image.parent().slimbox();
+			)
+
 Free the fish.
 
 		freeTheFish = ->
@@ -378,7 +389,6 @@ Fetch new messages from the server and pass them to `handleMessages`. The userli
 					remainingFailures = 3
 					handleMessages data.messages
 					handleUsers data.users
-					WCF.DOMNodeInsertedHandler.execute()
 				error: ->
 					console.error "Message loading failed, #{--remainingFailures} remaining"
 					if remainingFailures <= 0
@@ -414,6 +424,7 @@ Insert the given messages into the chat stream.
 				
 				li.appendTo $ '#timsChatMessageContainer > ul'
 			
+			WCF.DOMNodeInsertedHandler.execute()
 			$('#timsChatMessageContainer').scrollTop $('#timsChatMessageContainer').prop('scrollHeight') if $('#timsChatAutoscroll').data('status') is 1
 
 Rebuild the userlist based on the given `users`.
@@ -486,6 +497,7 @@ Remove all users that left the chat.
 					
 			
 			$('#toggleUsers .badge').text $('.timsChatUser').length
+			WCF.DOMNodeInsertedHandler.execute()
 
 Insert the given `text` into the input. If `options.append` is true the given `text` will be appended, otherwise it will replaced
 the existing text. If `options.submit` is true the message will be sent to the server afterwards.
