@@ -17,7 +17,7 @@
 }
  
 #tplChat {
-	#main > div {
+	#main > div > div {
 		display: -webkit-flex;
 		display: -ms-flexbox;
 		display: flex;
@@ -350,9 +350,12 @@ html.fullscreen {
 			height: 100%;
 			margin: 0;
 			padding: 0;
-			display: block !important;
+			
+			> div {
+				display: block !important;
+			}
 						
-			> div, .sidebar, #sidebarContainer {
+			> div, > div > div, .sidebar, #sidebarContainer {
 				height: 100%;
 			}
 		}
