@@ -29,7 +29,6 @@
 	}
 	
 	#content {
-		margin-right: 0;
 		-webkit-flex-grow: 1;
 		-ms-flex: 1 0 auto;
 		flex-grow: 1;
@@ -114,7 +113,6 @@
 			
 			&::before {
 				.icon;
-				.icon16;
 				padding: @wcfGapTiny;
 			}
 			
@@ -162,14 +160,21 @@
 			}
 		}
 	}
+
+	#main > div > div .sidebar {
+		display: block;
+	}
 	
 	.sidebar {
 		z-index: 131 !important;
 		padding: 0px !important;
-		float: none;
 		height: 100%;
-		position: relative;		
-		display: block !important;
+		
+		-webkit-flex-grow: 0;
+		flex-grow: 0;
+		-webkit-flex-shrink: 0;
+		flex-shrink: 0;
+		-ms-flex: 0 0 auto;
 		
 		> div {
 			height: 100%;
@@ -199,36 +204,9 @@
 			-webkit-flex-grow: 1;
 			-ms-flex: 1 0 auto;
 			flex-grow: 1;
-			height: 200px;
+			height: 400px;
 			
-			fieldset {
-				padding-top: 0px;
-				padding-bottom: 0px;
-			}
-			
-			nav {
-				ul {
-					> li {
-						> a {
-							padding: @wcfGapTiny @wcfGapMedium @wcfGapTiny @wcfGapLarge;
-							height: 24px; // height of avatar image
-						}
-						
-						> a:before {
-							display: inline-block;
-							content: "";
-							height: 100%;
-							vertical-align: middle;
-						}
-						
-						> &.active {
-							margin-top: @wcfGapSmall;
-						}
-					}
-				}
-			}
-			
-			ul:not(.dropdownMenu) {
+			ul {
 				> li {
 					margin-top: @wcfGapSmall;
 				}
@@ -256,10 +234,9 @@
 	
 	#timsChatRoomList {
 		> div {
-			> div {
-				margin-top: @wcfGapMedium;
-				text-align: center;
-			}
+			margin-top: @wcfGapMedium;
+			text-align: center;
+			width: auto;
 		}
 	}
 	
@@ -301,17 +278,6 @@
 		> ul {
 			text-align: right;
 		}
-	}
-	
-	#toggleRooms .ajaxLoad {
-		position: absolute;
-		right: 10px;
-		top: 7px;
-		display: none;
-	}
-	
-	#timsChatCopyright {
-		.textShadow(@wcfContentBackgroundColor);
 	}
 	
 	#timsChatCopyrightDialog > div {

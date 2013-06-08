@@ -435,23 +435,21 @@ Move the user to the new position if he was found in the old list.
 
 				if $.wcfIsset id
 					console.log "Moving User: '#{user.username}'"
-					element = $("##{id}").detach()
+					li = $("##{id}").detach()
 					
 					if user.awayStatus?
-						element.addClass 'away'
-						element.attr 'title', user.awayStatus
+						li.addClass 'away'
+						li.attr 'title', user.awayStatus
 					else
-						element.removeClass 'away'
-						element.removeAttr 'title'
-						element.data 'tooltip', ''
+						li.removeClass 'away'
+						li.removeAttr 'title'
+						li.data 'tooltip', ''
 					
 					if user.suspended
-						element.addClass 'suspended'
+						li.addClass 'suspended'
 					else
-						element.removeClass 'suspended'
+						li.removeClass 'suspended'
 					
-					$('#timsChatUserList > ul').append element
-
 Build HTML of the user and insert it into the list, if the users was not found in the chat before.
 
 				else
@@ -480,8 +478,8 @@ Build HTML of the user and insert it into the list, if the users was not found i
 					events.userMenu.fire user, menu
 					
 					li.append menu
-					li.appendTo $ '#timsChatUserList > ul'
 				
+				li.appendTo $ '#timsChatUserList > nav > ul'
 				foundUsers[id] = true
 
 Remove all users that left the chat.

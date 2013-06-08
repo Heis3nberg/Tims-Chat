@@ -7,21 +7,19 @@
 	</nav>
 	
 	<section id="sidebarContent" class="tabMenuContent">
-		<fieldset>
-			<nav id="timsChatUserList">
+		<fieldset id="timsChatUserList">
+			<nav>
 				<ul>
 				</ul>
 			</nav>
 		</fieldset>
 		
-		<fieldset>
-			<nav id="timsChatRoomList" style="display: none;">
-				<div>
-					<ul>
-					</ul>
-					<div><button type="button">{lang}chat.general.forceRefresh{/lang}</button></div>
-				</div>
+		<fieldset id="timsChatRoomList" style="display: none;">
+			<nav>
+				<ul>
+				</ul>
 			</nav>
+			<div><button type="button">{lang}chat.general.forceRefresh{/lang}</button></div>
 		</fieldset>
 	</section>
 </div>
