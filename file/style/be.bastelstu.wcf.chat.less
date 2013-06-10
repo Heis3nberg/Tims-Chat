@@ -312,18 +312,14 @@ html.fullscreen {
 			display: none;
 		}
 		
-		#main {
+		#main, #main > div, #main > div > div, .sidebar, #sidebarContainer {
 			height: 100%;
 			margin: 0;
 			padding: 0;
-			
-			> div {
-				display: block !important;
-			}
-						
-			> div, > div > div, .sidebar, #sidebarContainer {
-				height: 100%;
-			}
+		}
+		
+		#main > div {
+			display: block !important;
 		}
 	}
 }
