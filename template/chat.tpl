@@ -21,21 +21,24 @@
 						'chat.error.reload': '{lang}chat.error.reload{/lang}'
 					});
 					
-					{event name='beforeInit'}
-					
 					// Boot the chat
 					{if MODULE_SMILEY}WCF.TabMenu.init();{/if}
 					new WCF.Message.Smilies();
 					{capture assign='messageTemplate'}{include application='chat' file='message'}{/capture}
 					{capture assign='userTemplate'}{include application='chat' file='userListUser'}{/capture}
 					
+					var config = {
+						reloadTime: {@CHAT_RELOADTIME},
+						messageURL: '{link application="chat" controller="NewMessages"}{/link}',
+						installedCommands: [ {implode from=$commands item='command'}'{$command|encodeJS}'{/implode} ],
+						messageTypes: { {implode from=$messageTypes key='name' item='messageType'}'{$name|substr:5|encodeJS}': '{$messageType|encodeJS}'{/implode} }
+					};
+					
+					{event name='beforeInit'}
+					
 					be.bastelstu.Chat.init(
 						{$roomID},
-						{
-							reloadTime: {@CHAT_RELOADTIME},
-							messageURL: '{link application="chat" controller="NewMessages"}{/link}',
-							installedCommands: [ {implode from=$commands item='command'}'{$command|encodeJS}'{/implode} ]
-						}, 
+						config,
 						new WCF.Template('{literal}{if $newMessageCount}({#$newMessageCount}) {/if}{$title} - {/literal}{"chat.general.title"|language|encodeJS} - {PAGE_TITLE|language|encodeJS}'),
 						new WCF.Template('{@$messageTemplate|encodeJS}'),
 						new WCF.Template('{@$userTemplate|encodeJS}')
@@ -60,27 +63,6 @@
 			})(jQuery, this);
 		//]]>
 	</script>
-	
-	<!--<style type="text/css">
-		/*<![CDATA[*/
-		.timsChatMessage::before {
-			content: "";
-		}
-		
-		{assign var='type' value='\chat\data\message\Message::TYPE_'}
-		.timsChatMessage{$type|concat:'JOIN'|constant}::before {
-			content: "\f090";
-		}
-		
-		.timsChatMessage{$type|concat:'LEAVE'|constant}::before {
-			content: "\f08b";
-		}
-		
-		.timsChatMessage{$type|concat:'INFORMATION'|constant}::before {
-			content: "\f05a";
-		}
-		/*]]>*/
-	</style>-->
 </head>
 
 <body id="tpl{$templateName|ucfirst}">
@@ -112,7 +94,7 @@
 		{include file='messageFormSmilies' wysiwygSelector=''}
 	{/if}
 	
-	<nav id="timsChatOptions" class="marginTop buttonGroupNavigation">
+	<nav id="timsChatOptions" class="marginTop jsMobileNavigation buttonGroupNavigation">
 		<span class="invisible">{lang}chat.general.controls{/lang}</span>
 		<ul class="smallButtons buttonGroup">
 			<li><a id="timsChatAutoscroll" accesskey="d" class="button active timsChatToggle jsTooltip" title="{lang}chat.general.scroll{/lang}" data-status="1"><span class="icon icon16 icon-arrow-down"></span><span class="invisible">{lang}chat.general.scroll{/lang}</span></a></li>{*
