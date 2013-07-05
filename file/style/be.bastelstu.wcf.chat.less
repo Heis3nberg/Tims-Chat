@@ -29,45 +29,193 @@
 }
 
 #tplChat {
-	#main > div > div {
-		height: 500px;
-		
-		display: -webkit-flex;
-		display: -ms-flexbox;
-		display: flex;
-		
-		-webkit-flex-direction: row;
-		-ms-flex-direction: row;
-		flex-direction: row;
-	}
-	
-	#content {
-		-webkit-flex-grow: 1;
-		-ms-flex: 1 0 auto;
-		flex-grow: 1;
-		
-		-moz-box-sizing: border-box;
-		-webkit-box-sizing: border-box;
-		box-sizing: border-box;
-		
-		display: -webkit-flex;
-		display: -ms-flexbox;
-		display: flex;
-		
-		-webkit-flex-direction: column;
-		-ms-flex-direction: column;
-		flex-direction: column;
+	#main > div {
+		overflow: hidden;
+		position: relative;
 		
 		> div {
-			-webkit-flex-grow: 0;
-			-ms-flex: 0 0 auto;
-			flex-grow: 0;
-		}
-		
-		.timsChatMessageContainer {
-			-webkit-flex-grow: 1;
-			-ms-flex: 1 0 auto;
-			flex-grow: 1;
+			display: -moz-flex;
+			display: -webkit-flex;
+			display: -ms-flexbox;
+			display: flex;
+			
+			-moz-flex-direction: row;
+			-webkit-flex-direction: row;
+			-ms-flex-direction: row;
+			flex-direction: row;
+			
+			#content, > .sidebar {
+				height: 500px;
+				
+				@media only screen and (max-height: 320px) {
+					height: 320px;
+				}
+				
+				@media only screen and (max-height: 480px) {
+					height: 480px;
+				}
+			}
+			
+			#content {
+				// Fix dropdown ...
+				@media only screen and (max-width: 800px) {
+					padding-bottom: 0;
+					
+					#timsChatOptions {
+						&.buttonGroupNavigation > ul {
+							right: auto;
+							bottom: 0;
+							left: 32px;
+						}
+					}
+				}
+			
+				-moz-box-sizing: border-box;
+				-webkit-box-sizing: border-box;
+				-ms-box-sizing: border-box;
+				box-sizing: border-box;
+				
+				display: -moz-flex;
+				display: -webkit-flex;
+				display: -ms-flexbox;
+				display: flex;
+				
+				-moz-flex: 1 1 auto;
+				-webkit-flex: 1 1 auto;
+				-ms-flex: 1 1 auto;
+				flex: 1 1 auto;
+				
+				-moz-flex-direction: column; 
+				-webkit-flex-direction: column; 
+				-ms-flex-direction: column; 
+				flex-direction: column; 
+				
+				> * {
+					-moz-flex: 0 0 auto;
+					-webkit-flex: 0 0 auto;
+					-ms-flex: 0 0 auto;
+					flex: 0 0 auto;
+				}
+				
+				> .timsChatMessageContainer {
+					-moz-flex: 1 1 auto;
+					-webkit-flex: 1 1 auto;
+					-ms-flex: 1 1 auto;
+					flex: 1 1 auto;
+				}
+			}
+			
+			> .sidebar {
+				@media only screen and (max-width: 800px) {
+					display: none;
+				}
+				
+				display: -moz-flex;
+				display: -webkit-flex;
+				display: -ms-flexbox;
+				display: flex;
+
+				-moz-flex: 0 0 auto;
+				-webkit-flex: 0 0 auto;
+				-ms-flex: 0 0 auto;
+				flex: 0 0 auto;
+				
+				z-index: 131;
+				padding: 0;
+				
+				> div {
+					height: 100%;
+					
+					> .chatTabMenuContainer {
+						padding: 0;
+						height: 100%;
+						
+						display: -moz-flex;
+						display: -webkit-flex;
+						display: -ms-flexbox;
+						display: flex;
+						
+						-moz-flex-direction: column;
+						-webkit-flex-direction: column;
+						-ms-flex-direction: column;
+						flex-direction: column;
+						
+						> .chatSidebarMenu {
+							margin: 0;
+							background: @wcfContentBackgroundColor;
+							border-radius: 0px;
+								
+							-moz-flex: 0 0 auto;
+							-webkit-flex: 0 0 auto;
+							-ms-flex: 0 0 auto;
+							flex: 0 0 auto;
+						}
+					}
+				}
+				
+				#sidebarContent {
+					overflow-y: scroll; 
+					overflow-x: hidden;
+					
+					-moz-flex: 1 1 auto;
+					-webkit-flex: 1 1 auto;
+					-ms-flex: 1 1 auto;
+					flex: 1 1 auto;
+					
+					fieldset {
+						padding-top: 0px;
+						padding-bottom: 0px;
+					}
+					
+					nav {
+						ul {
+							> li {
+								> a {
+									padding: @wcfGapTiny @wcfGapMedium @wcfGapTiny @wcfGapLarge;
+									height: 24px; // height of avatar image
+								}
+								
+								> a:before {
+									display: inline-block;
+									content: "";
+									height: 100%;
+									vertical-align: middle;
+								}
+								
+								> &.active {
+									margin-top: @wcfGapSmall;
+								}
+							}
+						}
+					}
+					
+					ul:not(.dropdownMenu) {
+						> li {
+							margin-top: @wcfGapSmall;
+						}
+					}
+					
+					#timsChatUserList {
+						.timsChatUser {
+							> a {
+								background: @wcfContentBackgroundColor;
+								
+								img {
+									margin-right: @wcfGapSmall;
+								}
+							}
+							
+							&.away {
+								opacity: .5;
+							}
+							
+							&.suspended a {
+								text-decoration: line-through;
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 	
@@ -84,12 +232,16 @@
 			padding: 0px;
 			margin: 0px;
 		}
+		
+		.jsTopicCloser {
+			float: right;
+		}
 	}
 	
 	.timsChatMessageContainer {
-		height: 320px;
+		// height: 320px;
 		overflow-y: scroll;
-		overflow-x: hidden;
+		overflow-x: auto;
 		display: none;
 		
 		&.active {
@@ -116,6 +268,21 @@
 		ul {
 			display: table;
 			width: 100%;
+			
+			-moz-hyphens: auto;
+			-webkit-hyphens: auto;
+			-ms-hyphens: auto;
+			hyphens: auto;
+			
+			-moz-word-wrap: break-word;
+			-webkit-word-wrap: break-word;
+			-ms-word-wrap: break-word;
+			word-wrap: break-word;
+			
+			-moz-word-break: break-all;
+			-webkit-word-break: break-all;
+			-ms-word-break: break-all;
+			word-break: break-all;
 			
 			.timsChatMessage {
 				display: table-row;
@@ -161,8 +328,7 @@
 						
 						> .text {
 							img {
-								max-width: 480px;
-								max-height: 320px;
+								max-width: 200px;
 							}
 						}
 					}
@@ -264,78 +430,6 @@
 		}
 	}
 	
-	#main > div > div .sidebar {
-		display: block;
-	}
-	
-	.sidebar {
-		z-index: 131 !important;
-		padding: 0px !important;
-		height: 100%;
-		
-		-webkit-flex-grow: 0;
-		flex-grow: 0;
-		-webkit-flex-shrink: 0;
-		flex-shrink: 0;
-		-ms-flex: 0 0 auto;
-		
-		> div {
-			height: 100%;
-			> .chatTabMenuContainer {
-				padding: 0;
-				height: 100%;
-				
-				display: -webkit-flex;
-				display: -ms-flexbox;
-				display: flex;
-				
-				-webkit-flex-direction: column;
-				-ms-flex-direction: column;
-				flex-direction: column;
-				
-				> .chatSidebarMenu {
-					background: @wcfContentBackgroundColor;
-					margin: 0;
-					border-radius: 0px;
-				}
-			}
-		}
-		
-		#sidebarContent {
-			overflow-y: scroll;
-			-webkit-flex-grow: 1;
-			-ms-flex: 1 0 auto;
-			flex-grow: 1;
-			height: 400px;
-			
-			ul:not(.dropdownMenu) {
-				> li {
-					margin-top: @wcfGapSmall;
-				}
-			}
-			
-			#timsChatUserList {
-				.timsChatUser {
-					> a {
-						background: @wcfContentBackgroundColor;
-						
-						img {
-							margin-right: @wcfGapSmall;
-						}
-					}
-					
-					&.away {
-						opacity: .5;
-					}
-					
-					&.suspended a {
-						text-decoration: line-through;
-					}
-				}
-			}
-		}
-	}
-	
 	#timsChatRoomList {
 		> div {
 			> div {
@@ -346,6 +440,10 @@
 	}
 	
 	#smilies {
+		@media only screen and (max-width: 800px) {
+			display: none;
+		}
+		
 		li {
 			.transition(opacity, .2s);
 		}
@@ -362,16 +460,6 @@
 	@media only screen and (max-width: 800px) {
 		#timsChatMessageContainer {
 			overflow: auto;
-			
-			.timsChatMessage {
-				> time {
-					display: none !important;
-				}
-				
-				> .usernameContainer {
-					min-width: 0px !important;
-				}
-			}
 		}
 	}
 	
@@ -416,22 +504,26 @@ html.fullscreen {
 	height: 100%;
 	overflow: hidden;
 	
+	#content {
+		height: 100% !important;
+	}
+	
 	#tplChat {
 		height: 100%;
 		overflow: hidden;
+		
+		#main, #main > div, #main > div > div, .sidebar, #sidebarContainer {
+			height: 100% !important;
+			margin: 0;
+			padding: 0;
+		}
 		
 		#pageHeader, #pageFooter {
 			display: none;
 		}
 		
-		#main, #main > div, #main > div > div, .sidebar, #sidebarContainer { 
-			height: 100%;
-			margin: 0;
-			padding: 0;
-		}
-		
 		#main > div {
-			display: block; !important;
+			display: block;
 		}
 	}
 }
